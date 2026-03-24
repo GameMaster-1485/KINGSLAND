@@ -2,201 +2,233 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title></title>KINGSLND</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ارتقاء العرش | Gemini Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --gold-gradient: linear-gradient(145deg, #d4af37, #f9f295, #b8860b);
+            --gold: linear-gradient(135deg, #f9f295 0%, #b8860b 50%, #f9f295 100%);
             --royal-red: #8b0000;
             --dark-wood: #2c1e14;
             --parchment: #f4e4bc;
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            --shadow-soft: 0 4px 15px rgba(0,0,0,0.3);
+            --glow: 0 0 15px rgba(184, 134, 11, 0.5);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* منع التكبير واختيار النص على الهاتف */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            touch-action: manipulation;
+        }
         
         body { 
-            margin: 0; 
-            background: radial-gradient(circle, #3d2b1f 0%, #0f0a07 100%);
-            color: #2c1e14;
+            margin: 0; padding: 0;
+            background: #1a120b;
             font-family: 'Amiri', serif;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; overflow: hidden;
+            height: 100vh;
+            display: flex; justify-content: center; overflow: hidden;
         }
 
-        .game-container {
-            width: 100vw; max-width: 450px; height: 98vh;
+        /* خلفية متحركة هادئة */
+        .game-wrapper {
+            width: 100vw; max-width: 480px; height: 100vh;
             background: var(--parchment) url('https://www.transparenttextures.com/patterns/old-map.png');
-            border: 8px solid #4a3221;
-            border-image: url('https://www.transparenttextures.com/patterns/dark-leather.png') 30 stretch;
             display: flex; flex-direction: column;
-            box-shadow: var(--shadow);
-            position: relative; border-radius: 15px;
+            position: relative; border: 4px solid #4a3221;
+            box-shadow: 0 0 50px rgba(0,0,0,0.7);
         }
 
-        /* الرأس - إحصائيات ملكية */
-        .royal-header {
+        /* الإحصائيات العلوية */
+        .header {
             background: var(--dark-wood);
-            padding: 15px 10px;
+            padding: 10px 5px;
             display: grid; grid-template-columns: repeat(4, 1fr);
-            border-bottom: 4px solid #d4af37;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .stat-item { text-align: center; color: #f4e4bc; }
-        .stat-item i { color: #d4af37; display: block; font-size: 1.1rem; margin-bottom: 5px; }
-        .stat-item span { font-family: 'Reem Kufi', sans-serif; font-weight: bold; font-size: 0.9rem; }
-
-        /* شريط التنقل الفخم */
-        .tab-bar {
-            display: flex; background: #3d2b1f; padding: 5px;
             border-bottom: 2px solid #b8860b;
+            z-index: 10;
         }
-        .tab-btn {
-            flex: 1; padding: 12px 5px; color: #a07a56; border: none;
-            background: transparent; cursor: pointer; transition: 0.3s;
-            font-family: 'Reem Kufi', sans-serif; font-size: 0.8rem;
-        }
-        .tab-btn i { display: block; font-size: 1.4rem; margin-bottom: 4px; }
-        .tab-btn.active { color: #f9f295; text-shadow: 0 0 10px #d4af37; transform: translateY(-2px); }
+        .stat-card { text-align: center; color: #f4e4bc; position: relative; }
+        .stat-card:after { content:''; position: absolute; left: 0; top: 10%; height: 80%; width: 1px; background: rgba(255,255,255,0.1); }
+        .stat-card:last-child:after { display: none; }
+        .stat-card i { color: #d4af37; display: block; font-size: 1rem; margin-bottom: 3px; filter: drop-shadow(0 0 2px #d4af37); }
+        .stat-card b { font-size: 0.9rem; font-weight: bold; font-family: 'Courier New', monospace; }
 
-        /* المحتوى */
-        .scroll-area { 
-            flex: 1; overflow-y: auto; padding: 20px;
-            scrollbar-width: thin; scrollbar-color: #4a3221 transparent;
+        /* شريط التنقل المعدل والمتحرك */
+        .nav-tabs {
+            display: flex; background: #3d2b1f; padding: 0;
+            height: 65px; border-bottom: 2px solid #b8860b;
         }
-        .panel { display: none; }
-        .panel.active { display: block; animation: fadeInUp 0.4s ease-out; }
+        .tab {
+            flex: 1; color: #a07a56; border: none;
+            background: transparent; cursor: pointer;
+            font-family: 'Aref Ruqaa', serif; font-size: 0.8rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.3s ease; position: relative;
+        }
+        .tab i { font-size: 1.2rem; margin-bottom: 4px; transition: 0.3s; }
+        .tab:active i { transform: scale(1.1); }
+        .tab.active { color: #f9f295; font-weight: bold; }
+        .tab.active:after { content: ''; position: absolute; bottom: 0; left: 10%; width: 80%; height: 3px; background: var(--gold); border-radius: 5px; box-shadow: var(--glow); }
 
-        /* بطاقات العناصر */
-        .luxury-card {
+        /* منطقة المحتوى */
+        .content { 
+            flex: 1; overflow-y: auto; padding: 15px; 
+            -webkit-overflow-scrolling: touch;
+            background-color: rgba(0,0,0,0.01);
+        }
+        .panel { display: none; padding-bottom: 20px; }
+        .panel.active { display: block; animation: slideInUp 0.4s ease; }
+
+        /* بطاقات العناصر الملكية */
+        .luxury-item {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(74, 50, 33, 0.3);
-            border-right: 5px solid #d4af37;
-            padding: 15px; margin-bottom: 15px;
-            border-radius: 10px; display: flex;
-            justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(74, 50, 33, 0.2);
+            border-right: 5px solid #b8860b;
+            border-radius: 12px; padding: 15px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
-        .luxury-card b { font-family: 'Reem Kufi', sans-serif; color: #4a3221; font-size: 1.1rem; }
-        .luxury-card p { margin: 5px 0 0; font-size: 0.85rem; color: #6d4c41; }
+        .luxury-item:active { transform: scale(0.98); box-shadow: none; }
+        .info b { font-family: 'Aref Ruqaa', serif; font-size: 1.1rem; color: #1a120b; display: block; }
+        .info p { margin: 3px 0 0; font-size: 0.85rem; color: #5d4037; }
 
-        /* الأزرار */
-        .btn-gold {
-            background: var(--gold-gradient);
-            border: 1px solid #b8860b;
-            color: #2c1e14; font-weight: bold;
-            padding: 10px 18px; border-radius: 8px;
-            cursor: pointer; box-shadow: 0 4px 0 #8b6b07;
-            font-family: 'Reem Kufi', sans-serif;
+        /* الأزرار الذهبية */
+        .buy-btn {
+            background: var(--gold); border: 2px solid #4a3221;
+            padding: 10px 20px; border-radius: 8px;
+            font-weight: bold; font-size: 0.8rem; color: #1a120b;
+            font-family: 'Aref Ruqaa', serif;
+            box-shadow: 0 4px 0 #8b6b07;
+            transition: 0.1s ease;
         }
-        .btn-gold:active { transform: translateY(3px); box-shadow: none; }
+        .buy-btn:active { transform: translateY(3px); box-shadow: none; }
 
-        .btn-action {
-            width: 100%; padding: 18px; font-size: 1.2rem;
-            margin-bottom: 10px; border-radius: 12px;
-            border: 2px solid #f9f295; cursor: pointer;
-            color: white; font-family: 'Reem Kufi', sans-serif;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        /* الأزرار السفلية الكبيرة جداً */
+        .footer { 
+            padding: 15px 15px calc(15px + env(safe-area-inset-bottom)); 
+            background: #efebe9; border-top: 3px solid #b8860b;
         }
+        .main-btn {
+            width: 100%; height: 60px; margin-bottom: 10px; border-radius: 15px;
+            border: none; font-weight: bold; font-family: 'Aref Ruqaa', serif;
+            color: white; font-size: 1.3rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+            transition: 0.2s ease;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .main-btn:active { transform: translateY(4px); box-shadow: none; }
+        .main-btn:disabled { background: #ccc !important; box-shadow: none; cursor: not-allowed; opacity: 0.7; }
 
-        /* الرتبة */
-        #rank-badge {
+        /* شعار الرتبة */
+        .rank-badge {
             background: var(--royal-red); color: white;
-            padding: 5px 20px; border-radius: 20px;
-            display: inline-block; margin: 10px auto;
-            border: 2px solid #d4af37; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(139, 0, 0, 0.4);
+            padding: 6px 20px; border-radius: 20px;
+            font-family: 'Aref Ruqaa', serif; font-size: 0.9rem;
+            margin: 10px auto; border: 2px solid #d4af37;
+            display: inline-block; box-shadow: var(--glow);
         }
 
-        /* نافذة الأحداث */
-        .event-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+        /* تحريكات */
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* النوافذ العائمة الملكية */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             display: none; flex-direction: column; align-items: center;
-            justify-content: center; z-index: 1000; color: #d4af37;
-            text-align: center; backdrop-filter: blur(10px);
+            justify-content: center; z-index: 2000; color: #d4af37; text-align: center;
+            padding: 20px; backdrop-filter: blur(10px);
         }
-
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .event-card {
+            background: #1a120b; border: 5px double var(--gold);
+            padding: 30px; border-radius: 20px;
+            box-shadow: var(--glow);
+            animation: fadeIn 0.5s;
+        }
     </style>
 </head>
 <body>
 
-<div id="eventOverlay" class="event-overlay">
-    <div style="border: 5px double #d4af37; padding: 40px; border-radius: 20px; background: #1a120b;">
-        <i id="evIcon" class="fas fa-crown" style="font-size: 5rem; filter: drop-shadow(0 0 10px #d4af37);"></i>
-        <h1 id="evTitle" style="font-family: 'Reem Kufi', sans-serif; font-size: 2.5rem; margin: 20px 0;"></h1>
-        <p id="evDesc" style="font-size: 1.2rem; margin-bottom: 30px;"></p>
-        <button class="btn-gold" style="padding: 15px 50px;" onclick="closeEvent()">طاعة وامتثال</button>
+<div id="eventBox" class="overlay">
+    <div class="event-card">
+        <i id="evIcon" class="fas fa-crown" style="font-size: 5rem; margin-bottom: 20px; color: gold;"></i>
+        <h1 id="evTitle" style="font-family: 'Aref Ruqaa', serif; margin: 0; font-size: 2rem;"></h1>
+        <p id="evDesc" style="font-size: 1.2rem; margin: 15px 0 30px; color: #f4e4bc;"></p>
+        <button class="buy-btn" style="padding: 15px 60px; font-size: 1.1rem;" onclick="closeEvent()">طاعة وامتثال</button>
     </div>
 </div>
 
-<div class="game-container">
-    <div class="royal-header">
-        <div class="stat-item"><i class="fas fa-coins"></i><span id="gold">200</span></div>
-        <div class="stat-item"><i class="fas fa-wheat-awn"></i><span id="wheat">100</span></div>
-        <div class="stat-item"><i class="fas fa-users"></i><span id="pop">10</span></div>
-        <div class="stat-item"><i class="fas fa-fist-raised"></i><span id="power">0</span></div>
+<div class="game-wrapper">
+    <div class="header">
+        <div class="stat-card"><i class="fas fa-coins"></i><span id="gold">200</span></div>
+        <div class="stat-card"><i class="fas fa-wheat-awn"></i><span id="wheat">100</span></div>
+        <div class="stat-card"><i class="fas fa-users"></i><span id="pop">10</span></div>
+        <div class="stat-card"><i class="fas fa-fist-raised"></i><span id="power">0</span></div>
     </div>
 
-    <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab(event, 'farmTab')"><i class="fas fa-tractor"></i>الزراعة</button>
-        <button class="tab-btn" onclick="switchTab(event, 'armyTab')"><i class="fas fa-swords"></i>التجنيد</button>
-        <button class="tab-btn" onclick="switchTab(event, 'dynastyTab')"><i class="fas fa-castle"></i>السلالة</button>
-        <button class="tab-btn" onclick="switchTab(event, 'warTab')"><i class="fas fa-map-marked"></i>الحرب</button>
+    <div class="nav-tabs">
+        <div class="tab active" onclick="tab(event, 'farm')"><i class="fas fa-tractor"></i>الزراعة</div>
+        <div class="tab" onclick="tab(event, 'army')"><i class="fas fa-swords"></i>الجيش</div>
+        <div class="tab" onclick="tab(event, 'throne')"><i class="fas fa-crown"></i>العرش</div>
+        <div class="tab" onclick="tab(event, 'war')"><i class="fas fa-map-marked"></i>الحرب</div>
     </div>
 
-    <div class="scroll-area">
-        <div style="text-align: center;"><div id="rank-badge">قروي بسيط</div></div>
+    <div class="content">
+        <div style="text-align: center;"><div id="rank-tag" class="rank-badge">قروي بسيط</div></div>
 
-        <div id="farmTab" class="panel active">
-            <div class="luxury-card">
-                <div><b>توسيع المزارع</b><p>جلب 5 فلاحين للعمل</p></div>
-                <button class="btn-gold" onclick="buy('pop', 50)">50💰</button>
+        <div id="farm" class="panel active">
+            <div class="luxury-item">
+                <div class="info"><b>جذب مزارعين</b><p>يزيد إنتاج القمح التلقائي</p></div>
+                <button class="buy-btn" onclick="buy('pop', 50)">50 💰</button>
             </div>
-            <div class="luxury-card">
-                <div><b>مطحنة ذهبية</b><p>تطوير كفاءة الحصاد</p></div>
-                <button class="btn-gold" onclick="upgrade('mill', 500)">500💰</button>
+            <div class="luxury-item">
+                <div class="info"><b>تطوير المطحنة</b><p>تضاعف قوة الحصاد اليدوي</p></div>
+                <button class="buy-btn" onclick="upgrade('mill', 500)">500 💰</button>
             </div>
         </div>
 
-        <div id="armyTab" class="panel">
-            <h4 style="text-align:center; color:var(--royal-red);">ديوان الجند والمشاة</h4>
-            <div class="luxury-card">
-                <div><b>مشاة مخلصون</b><p>قوة هجوم +15</p></div>
-                <button class="btn-gold" onclick="recruit(15, 120)">120💰</button>
+        <div id="army" class="panel">
+            <div class="luxury-item">
+                <div class="info"><b>تجنيد حرس</b><p>قوة الإمبراطورية +25</p></div>
+                <button class="buy-btn" onclick="recruit(25, 150)">150 💰</button>
             </div>
-            <div class="luxury-card">
-                <div><b>فرسان مدرعون</b><p>قوة هجوم +70</p></div>
-                <button class="btn-gold" onclick="recruit(70, 800)">800💰</button>
+            <div class="luxury-item">
+                <div class="info"><b>فرسان مدرعون</b><p>قوة الإمبراطورية +100</p></div>
+                <button class="buy-btn" onclick="recruit(100, 1200)">1.2k 💰</button>
             </div>
         </div>
 
-        <div id="dynastyTab" class="panel">
-            <div id="marriageUI" style="text-align:center; padding: 30px 10px;">
-                <i class="fas fa-gem" style="font-size: 3rem; color: #b8860b; margin-bottom: 15px;"></i>
-                <p style="font-weight:bold;">الزواج الملكي يتطلب رتبة (لورد) و 5000 ذهبة</p>
-                <button class="btn-gold" id="marryBtn" onclick="marry()">إقامة حفل زفاف</button>
+        <div id="throne" class="panel">
+            <div id="marriageUI" style="text-align:center; padding-top: 20px;">
+                <p style="font-size: 0.9rem; font-weight:bold;">الزواج الملكي يتطلب رتبة (لورد) و 5000 ذهبة</p>
+                <button class="buy-btn" id="mBtn" style="width: 90%; padding: 18px; font-size:1.1rem;" onclick="marry()">طلب خطبة ملكية</button>
             </div>
-            <div id="familyUI" style="display:none; text-align:center;">
-                <div class="luxury-card" style="display:block; text-align:center;">
-                    <i class="fas fa-baby-carriage" style="font-size:2rem; color:var(--royal-red);"></i>
-                    <h3 id="heirsText">الورثة: 0</h3>
-                    <p>فرصة ظهور وريث تزداد مع مرور الوقت</p>
+            <div id="dynastyUI" style="display:none; text-align:center;">
+                <div class="luxury-item" style="display:block; text-align:center; border: 2px solid #b8860b;">
+                    <h2 id="heirText" style="font-family:'Aref Ruqaa', serif; color:var(--royal-red); margin: 0; font-size: 2rem;">الورثة: 0</h2>
+                    <p>ورثة العرش يؤمنون مستقبل إمبراطوريتك العظيمة.</p>
                 </div>
             </div>
         </div>
 
-        <div id="warTab" class="panel">
-            <div id="mapList"></div>
+        <div id="war" class="panel">
+            <div id="warList"></div>
         </div>
     </div>
 
-    <div style="padding: 15px; background: rgba(0,0,0,0.05);">
-        <button class="btn-action" style="background: linear-gradient(to right, #228b22, #32cd32);" onclick="harvest()">حصد المحاصيل 🌾</button>
-        <button class="btn-action" style="background: var(--gold-gradient); color: black;" onclick="sell()">بيع المحصول للتجار 💰</button>
+    <div class="footer">
+        <button class="main-btn" style="background: linear-gradient(135deg, #2e7d32, #1b5e20); color: white;" onclick="harvest()">
+            <i class="fas fa-wheat-awn"></i> حصد القمح 🌾
+        </button>
+        <button class="main-btn" style="background: var(--gold); color: black;" onclick="sell()">
+            <i class="fas fa-coins"></i> بيع كل المحصول للتجار 💰
+        </button>
     </div>
 </div>
 
@@ -205,31 +237,30 @@
     const ranks = ["قروي بسيط", "لورد المقاطعة", "دوق المملكة", "ملك عظيم", "إمبراطور الشرق"];
 
     function update() {
-        document.getElementById('gold').innerText = Math.floor(s.gold);
-        document.getElementById('wheat').innerText = Math.floor(s.wheat);
+        document.getElementById('gold').innerText = Math.floor(s.gold).toLocaleString();
+        document.getElementById('wheat').innerText = Math.floor(s.wheat).toLocaleString();
         document.getElementById('pop').innerText = s.pop;
         document.getElementById('power').innerText = s.power;
-        document.getElementById('rank-badge').innerText = ranks[s.rank];
-        document.getElementById('heirsText').innerText = "ورثة العرش: " + s.heirs;
+        document.getElementById('rank-tag').innerText = ranks[s.rank];
+        document.getElementById('heirText').innerText = "ورثة العرش: " + s.heirs;
         
         if(s.wife) {
             document.getElementById('marriageUI').style.display = 'none';
-            document.getElementById('familyUI').style.display = 'block';
+            document.getElementById('dynastyUI').style.display = 'block';
         }
-        document.getElementById('marryBtn').disabled = (s.gold < 5000 || s.rank < 1);
+        document.getElementById('mBtn').disabled = (s.gold < 5000 || s.rank < 1);
         renderWar();
         checkRank();
     }
 
-    function switchTab(e, tabId) {
+    function tab(e, id) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
         e.currentTarget.classList.add('active');
     }
 
     function harvest() { s.wheat += 15 * s.mill; update(); }
-    
     function sell() {
         if(s.wheat > 0) {
             s.gold += s.wheat * (s.rank >= 3 ? 6 : 3);
@@ -239,15 +270,12 @@
 
     function buy(id, c) { if(s.gold >= c) { s.gold -= c; s[id] += 5; update(); } }
     function upgrade(id, c) { if(s.gold >= c) { s.gold -= c; s.mill++; update(); } }
-
-    function recruit(p, c) {
-        if(s.gold >= c) { s.gold -= c; s.power += p; update(); }
-    }
+    function recruit(p, c) { if(s.gold >= c) { s.gold -= c; s.power += p; update(); } }
 
     function marry() {
         if(s.gold >= 5000 && s.rank >= 1) {
             s.gold -= 5000; s.wife = true;
-            showEvent("عرس ملكي", "لقد أصبحت سلالتك رسمية الآن!", "fa-heart");
+            showEvent("الزفاف الملكي", "دخلت القفص الذهبي، سلالتك ستبدأ للأبد!", "fa-heart");
             update();
         }
     }
@@ -256,7 +284,7 @@
         let n = s.rank;
         if(s.gold >= 60000 && s.heirs >= 2) n = 4;
         else if(s.gold >= 20000 && s.heirs >= 1) n = 3;
-        else if(s.gold >= 6000) n = 2;
+        else if(s.gold >= 7000) n = 2;
         else if(s.gold >= 1000) n = 1;
 
         if(n > s.rank) {
@@ -265,35 +293,35 @@
         }
     }
 
-    function renderWar() {
-        const m = [{n:"قطاع طرق", p:80, g:2500}, {n:"قلعة منيعة", p:600, g:15000}, {n:"قارة جديدة", p:4000, g:200000}];
+    function renderMap() {
+        const m = [{n:"قطاع طرق", p:120, g:3000}, {n:"قلعة منيعة", p:800, g:18000}, {n:"إمبراطورية الشرق", p:6000, g:250000}];
         let h = "";
         m.forEach(i => {
-            h += `<div class="luxury-card"><div><b>${i.n}</b><p>القوة: ${i.p}</p></div>
-            <button class="btn-gold" style="background:#8b0000; color:white;" onclick="attack(${i.p}, ${i.g})">غزو</button></div>`;
+            h += `<div class="luxury-item"><div><b>${i.n}</b><p>القوة: ${i.p}</p></div>
+            <button class="buy-btn" style="background:var(--royal-red); color:white;" onclick="warAttack(${i.p}, ${i.g})">غزو</button></div>`;
         });
-        document.getElementById('mapList').innerHTML = h;
+        document.getElementById('warList').innerHTML = h;
     }
 
-    function attack(p, g) {
-        if(s.power >= p) { s.gold += g; alert("نصر ساحق!"); }
-        else { s.power = Math.floor(s.power * 0.5); alert("هزيمة نكراء!"); }
+    function warAttack(p, g) {
+        if(s.power >= p) { s.gold += g; showEvent("النصر!", "عدت بغنائم وفيرة وذهب كثير!", "fa-shield-halved"); }
+        else { s.power = Math.floor(s.power * 0.5); showEvent("الهزيمة", "أبيد نصف جيشك، عليك إعادة التجنيد!", "fa-skull-crossbones"); }
         update();
     }
 
     setInterval(() => {
-        s.wheat += (s.pop * 0.2); // إنتاج تلقائي
-        if(s.wife && Math.random() < 0.03) s.heirs++; // ولادة
+        s.wheat += (s.pop * 0.3); // إنتاج تلقائي تلقائي
+        if(s.wife && Math.random() < 0.04) s.heirs++; // ولادة عشوائية
         update();
-    }, 2500);
+    }, 2000);
 
     function showEvent(t, d, i) {
         document.getElementById('evTitle').innerText = t;
         document.getElementById('evDesc').innerText = d;
         document.getElementById('evIcon').className = "fas " + i;
-        document.getElementById('eventOverlay').style.display = 'flex';
+        document.getElementById('eventBox').style.display = 'flex';
     }
-    function closeEvent() { document.getElementById('eventOverlay').style.display = 'none'; }
+    function closeEvent() { document.getElementById('eventBox').style.display = 'none'; }
 
     window.onload = update;
 </script>
