@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>إمبراطورية Gemini: العصر الذهبي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --gold-gradient: linear-gradient(145deg, #d4af37, #f9f295, #b8860b);
+            --royal-red: #8b0000;
+            --dark-wood: #2c1e14;
+            --parchment: #f4e4bc;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            margin: 0; 
+            background: radial-gradient(circle, #3d2b1f 0%, #0f0a07 100%);
+            color: #2c1e14;
+            font-family: 'Amiri', serif;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden;
+        }
+
+        .game-container {
+            width: 100vw; max-width: 450px; height: 98vh;
+            background: var(--parchment) url('https://www.transparenttextures.com/patterns/old-map.png');
+            border: 8px solid #4a3221;
+            border-image: url('https://www.transparenttextures.com/patterns/dark-leather.png') 30 stretch;
+            display: flex; flex-direction: column;
+            box-shadow: var(--shadow);
+            position: relative; border-radius: 15px;
+        }
+
+        /* الرأس - إحصائيات ملكية */
+        .royal-header {
+            background: var(--dark-wood);
+            padding: 15px 10px;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            border-bottom: 4px solid #d4af37;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .stat-item { text-align: center; color: #f4e4bc; }
+        .stat-item i { color: #d4af37; display: block; font-size: 1.1rem; margin-bottom: 5px; }
+        .stat-item span { font-family: 'Reem Kufi', sans-serif; font-weight: bold; font-size: 0.9rem; }
+
+        /* شريط التنقل الفخم */
+        .tab-bar {
+            display: flex; background: #3d2b1f; padding: 5px;
+            border-bottom: 2px solid #b8860b;
+        }
+        .tab-btn {
+            flex: 1; padding: 12px 5px; color: #a07a56; border: none;
+            background: transparent; cursor: pointer; transition: 0.3s;
+            font-family: 'Reem Kufi', sans-serif; font-size: 0.8rem;
+        }
+        .tab-btn i { display: block; font-size: 1.4rem; margin-bottom: 4px; }
+        .tab-btn.active { color: #f9f295; text-shadow: 0 0 10px #d4af37; transform: translateY(-2px); }
+
+        /* المحتوى */
+        .scroll-area { 
+            flex: 1; overflow-y: auto; padding: 20px;
+            scrollbar-width: thin; scrollbar-color: #4a3221 transparent;
+        }
+        .panel { display: none; }
+        .panel.active { display: block; animation: fadeInUp 0.4s ease-out; }
+
+        /* بطاقات العناصر */
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(74, 50, 33, 0.3);
+            border-right: 5px solid #d4af37;
+            padding: 15px; margin-bottom: 15px;
+            border-radius: 10px; display: flex;
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .luxury-card b { font-family: 'Reem Kufi', sans-serif; color: #4a3221; font-size: 1.1rem; }
+        .luxury-card p { margin: 5px 0 0; font-size: 0.85rem; color: #6d4c41; }
+
+        /* الأزرار */
+        .btn-gold {
+            background: var(--gold-gradient);
+            border: 1px solid #b8860b;
+            color: #2c1e14; font-weight: bold;
+            padding: 10px 18px; border-radius: 8px;
+            cursor: pointer; box-shadow: 0 4px 0 #8b6b07;
+            font-family: 'Reem Kufi', sans-serif;
+        }
+        .btn-gold:active { transform: translateY(3px); box-shadow: none; }
+
+        .btn-action {
+            width: 100%; padding: 18px; font-size: 1.2rem;
+            margin-bottom: 10px; border-radius: 12px;
+            border: 2px solid #f9f295; cursor: pointer;
+            color: white; font-family: 'Reem Kufi', sans-serif;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* الرتبة */
+        #rank-badge {
+            background: var(--royal-red); color: white;
+            padding: 5px 20px; border-radius: 20px;
+            display: inline-block; margin: 10px auto;
+            border: 2px solid #d4af37; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(139, 0, 0, 0.4);
+        }
+
+        /* نافذة الأحداث */
+        .event-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            display: none; flex-direction: column; align-items: center;
+            justify-content: center; z-index: 1000; color: #d4af37;
+            text-align: center; backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="eventOverlay" class="event-overlay">
+    <div style="border: 5px double #d4af37; padding: 40px; border-radius: 20px; background: #1a120b;">
+        <i id="evIcon" class="fas fa-crown" style="font-size: 5rem; filter: drop-shadow(0 0 10px #d4af37);"></i>
+        <h1 id="evTitle" style="font-family: 'Reem Kufi', sans-serif; font-size: 2.5rem; margin: 20px 0;"></h1>
+        <p id="evDesc" style="font-size: 1.2rem; margin-bottom: 30px;"></p>
+        <button class="btn-gold" style="padding: 15px 50px;" onclick="closeEvent()">طاعة وامتثال</button>
+    </div>
+</div>
+
+<div class="game-container">
+    <div class="royal-header">
+        <div class="stat-item"><i class="fas fa-coins"></i><span id="gold">200</span></div>
+        <div class="stat-item"><i class="fas fa-wheat-awn"></i><span id="wheat">100</span></div>
+        <div class="stat-item"><i class="fas fa-users"></i><span id="pop">10</span></div>
+        <div class="stat-item"><i class="fas fa-fist-raised"></i><span id="power">0</span></div>
+    </div>
+
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(event, 'farmTab')"><i class="fas fa-tractor"></i>الزراعة</button>
+        <button class="tab-btn" onclick="switchTab(event, 'armyTab')"><i class="fas fa-swords"></i>التجنيد</button>
+        <button class="tab-btn" onclick="switchTab(event, 'dynastyTab')"><i class="fas fa-castle"></i>السلالة</button>
+        <button class="tab-btn" onclick="switchTab(event, 'warTab')"><i class="fas fa-map-marked"></i>الحرب</button>
+    </div>
+
+    <div class="scroll-area">
+        <div style="text-align: center;"><div id="rank-badge">قروي بسيط</div></div>
+
+        <div id="farmTab" class="panel active">
+            <div class="luxury-card">
+                <div><b>توسيع المزارع</b><p>جلب 5 فلاحين للعمل</p></div>
+                <button class="btn-gold" onclick="buy('pop', 50)">50💰</button>
+            </div>
+            <div class="luxury-card">
+                <div><b>مطحنة ذهبية</b><p>تطوير كفاءة الحصاد</p></div>
+                <button class="btn-gold" onclick="upgrade('mill', 500)">500💰</button>
+            </div>
+        </div>
+
+        <div id="armyTab" class="panel">
+            <h4 style="text-align:center; color:var(--royal-red);">ديوان الجند والمشاة</h4>
+            <div class="luxury-card">
+                <div><b>مشاة مخلصون</b><p>قوة هجوم +15</p></div>
+                <button class="btn-gold" onclick="recruit(15, 120)">120💰</button>
+            </div>
+            <div class="luxury-card">
+                <div><b>فرسان مدرعون</b><p>قوة هجوم +70</p></div>
+                <button class="btn-gold" onclick="recruit(70, 800)">800💰</button>
+            </div>
+        </div>
+
+        <div id="dynastyTab" class="panel">
+            <div id="marriageUI" style="text-align:center; padding: 30px 10px;">
+                <i class="fas fa-gem" style="font-size: 3rem; color: #b8860b; margin-bottom: 15px;"></i>
+                <p style="font-weight:bold;">الزواج الملكي يتطلب رتبة (لورد) و 5000 ذهبة</p>
+                <button class="btn-gold" id="marryBtn" onclick="marry()">إقامة حفل زفاف</button>
+            </div>
+            <div id="familyUI" style="display:none; text-align:center;">
+                <div class="luxury-card" style="display:block; text-align:center;">
+                    <i class="fas fa-baby-carriage" style="font-size:2rem; color:var(--royal-red);"></i>
+                    <h3 id="heirsText">الورثة: 0</h3>
+                    <p>فرصة ظهور وريث تزداد مع مرور الوقت</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="warTab" class="panel">
+            <div id="mapList"></div>
+        </div>
+    </div>
+
+    <div style="padding: 15px; background: rgba(0,0,0,0.05);">
+        <button class="btn-action" style="background: linear-gradient(to right, #228b22, #32cd32);" onclick="harvest()">حصد المحاصيل 🌾</button>
+        <button class="btn-action" style="background: var(--gold-gradient); color: black;" onclick="sell()">بيع المحصول للتجار 💰</button>
+    </div>
+</div>
+
+<script>
+    let s = { gold: 200, wheat: 100, pop: 10, power: 0, rank: 0, heirs: 0, wife: false, mill: 1 };
+    const ranks = ["قروي بسيط", "لورد المقاطعة", "دوق المملكة", "ملك عظيم", "إمبراطور الشرق"];
+
+    function update() {
+        document.getElementById('gold').innerText = Math.floor(s.gold);
+        document.getElementById('wheat').innerText = Math.floor(s.wheat);
+        document.getElementById('pop').innerText = s.pop;
+        document.getElementById('power').innerText = s.power;
+        document.getElementById('rank-badge').innerText = ranks[s.rank];
+        document.getElementById('heirsText').innerText = "ورثة العرش: " + s.heirs;
+        
+        if(s.wife) {
+            document.getElementById('marriageUI').style.display = 'none';
+            document.getElementById('familyUI').style.display = 'block';
+        }
+        document.getElementById('marryBtn').disabled = (s.gold < 5000 || s.rank < 1);
+        renderWar();
+        checkRank();
+    }
+
+    function switchTab(e, tabId) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        e.currentTarget.classList.add('active');
+    }
+
+    function harvest() { s.wheat += 15 * s.mill; update(); }
+    
+    function sell() {
+        if(s.wheat > 0) {
+            s.gold += s.wheat * (s.rank >= 3 ? 6 : 3);
+            s.wheat = 0; update();
+        }
+    }
+
+    function buy(id, c) { if(s.gold >= c) { s.gold -= c; s[id] += 5; update(); } }
+    function upgrade(id, c) { if(s.gold >= c) { s.gold -= c; s.mill++; update(); } }
+
+    function recruit(p, c) {
+        if(s.gold >= c) { s.gold -= c; s.power += p; update(); }
+    }
+
+    function marry() {
+        if(s.gold >= 5000 && s.rank >= 1) {
+            s.gold -= 5000; s.wife = true;
+            showEvent("عرس ملكي", "لقد أصبحت سلالتك رسمية الآن!", "fa-heart");
+            update();
+        }
+    }
+
+    function checkRank() {
+        let n = s.rank;
+        if(s.gold >= 60000 && s.heirs >= 2) n = 4;
+        else if(s.gold >= 20000 && s.heirs >= 1) n = 3;
+        else if(s.gold >= 6000) n = 2;
+        else if(s.gold >= 1000) n = 1;
+
+        if(n > s.rank) {
+            s.rank = n;
+            showEvent("ارتقاء المقام", "أنت الآن برتبة: " + ranks[s.rank], "fa-crown");
+        }
+    }
+
+    function renderWar() {
+        const m = [{n:"قطاع طرق", p:80, g:2500}, {n:"قلعة منيعة", p:600, g:15000}, {n:"قارة جديدة", p:4000, g:200000}];
+        let h = "";
+        m.forEach(i => {
+            h += `<div class="luxury-card"><div><b>${i.n}</b><p>القوة: ${i.p}</p></div>
+            <button class="btn-gold" style="background:#8b0000; color:white;" onclick="attack(${i.p}, ${i.g})">غزو</button></div>`;
+        });
+        document.getElementById('mapList').innerHTML = h;
+    }
+
+    function attack(p, g) {
+        if(s.power >= p) { s.gold += g; alert("نصر ساحق!"); }
+        else { s.power = Math.floor(s.power * 0.5); alert("هزيمة نكراء!"); }
+        update();
+    }
+
+    setInterval(() => {
+        s.wheat += (s.pop * 0.2); // إنتاج تلقائي
+        if(s.wife && Math.random() < 0.03) s.heirs++; // ولادة
+        update();
+    }, 2500);
+
+    function showEvent(t, d, i) {
+        document.getElementById('evTitle').innerText = t;
+        document.getElementById('evDesc').innerText = d;
+        document.getElementById('evIcon').className = "fas " + i;
+        document.getElementById('eventOverlay').style.display = 'flex';
+    }
+    function closeEvent() { document.getElementById('eventOverlay').style.display = 'none'; }
+
+    window.onload = update;
+</script>
+</body>
+</html>
